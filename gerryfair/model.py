@@ -133,7 +133,7 @@ class Model:
                 y_hat = new_preds
             else:
                 y_hat = np.add(y_hat, new_preds)
-        return y_hat
+        return pd.DataFrame(y_hat)
 
     def train(self, X, X_prime, y, alg="fict"):
         if alg == "fict":
@@ -300,7 +300,9 @@ class Auditor:
         """Takes in predictions on dataset (X',y) and prints gamma-unfairness,
         fp disparity, group size, group coefficients, and sensitive column names.
         """
+        if isinstance(predictions, pd.DataFrame):
+            predictions = predictions.values
         FP = np.mean([p for i,p in enumerate(predictions) if y[i] == 0])
-        aud_group, gamma_unfair, fp_in_group, err_group, pos_neg = get_group(predictions, X_sens=X_prime, y_g=y, FP=FP)
+        aud_group, gamma_unfair, fp_in_group, err_group, pos_neg = self.get_group(predictions, X_sens=X_prime, y_g=y, FP=FP)
 
         return aud_group, gamma_unfair
