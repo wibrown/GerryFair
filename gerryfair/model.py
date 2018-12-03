@@ -305,4 +305,4 @@ class Auditor:
         FP = np.mean([p for i,p in enumerate(predictions) if y[i] == 0])
         aud_group, gamma_unfair, fp_in_group, err_group, pos_neg = self.get_group(predictions, X_sens=X_prime, y_g=y, FP=FP)
 
-        return aud_group, gamma_unfair
+        return aud_group.predict(X_prime), gamma_unfair
